@@ -1,6 +1,10 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+import { connectToDatabase } from "@/plugins/database";
+import User from "@/plugins/models/user";
+import { IUserReq } from "@/core/interfaces/user";
+
 const handle = NextAuth({
   providers: [
     GoogleProvider({
@@ -9,13 +13,36 @@ const handle = NextAuth({
     }),
   ],
   async session({ session, token, user }) {
-    // session.user.id = user.id;
-    // return session;
+    const sessionUser = await User.findOne({ email: session.user.email });
+
+    session.user.id = sessionUser?._id.toString() || "";
+
+    return session;
   },
-  async signIn({ email, password }) {
+  async signIn({ profile }: { profile: IUserReq }) {
+    console.log("profile", profile);
+
+    const { email, username, avatar } = profile;
+
     try {
-      // serverless
-    } catch (error) {}
+      await connectToDatabase();
+
+      // check if a user already exists
+      const userExits = await User.findOne({ email });
+      // If not, create a new user
+      if (!userExits) {
+        const newUser = new User({
+          email,
+          username: username.replace(" ", "").toLowerCase(),
+          avatar,
+        });
+        await newUser.save();
+      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   },
 });
 

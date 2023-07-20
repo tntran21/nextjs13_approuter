@@ -23,3 +23,5 @@ const connectToDatabase = async () => {
     console.log("MongoDB: Connection failed", error);
   }
 };
+
+export { connectToDatabase };
