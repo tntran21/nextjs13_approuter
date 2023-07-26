@@ -24,7 +24,7 @@ const PromptFeed = () => {
   }, []);
 
   return (
-    <section className="feed">
+    <div className="feed">
       <form action="handleSearch" className="w-full">
         <input
           className="search_input peer"
@@ -36,7 +36,7 @@ const PromptFeed = () => {
         />
       </form>
       <PromptCardList data={posts} handleTagClick={() => {}} />
-    </section>
+    </div>
   );
 };
 
