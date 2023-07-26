@@ -10,7 +10,6 @@ const StyledHeader = styled.header`
   padding: 0 1rem;
   height: 4rem;
   background-color: #fff;
-  color: #fff;
   font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
@@ -26,6 +25,9 @@ const StyledHeader = styled.header`
         opacity: 0.7;
       }
     }
+  }
+  .dropdown {
+    min-width: 150px;
   }
 `;
 
